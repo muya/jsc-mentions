@@ -18,10 +18,12 @@ create table if not exists platforms(
 	dateModified timestamp not null on update current_timestamp
 ) ENGINE=InnoDB;
 
-create table if not exist jsc_mentions(
+create table if not exists jsc_mentions(
 	id int(11) unsigned primary key auto_increment,
 	platformID int(11) unsigned not null,
 	locationID int(11) unsigned not null,
 	dateCreated datetime not null,
-	dateModified timestamp not null on update current_timestamp
+	dateModified timestamp not null on update current_timestamp,
+    constraint foreign key (`platformID`) references `platforms`(`id`),
+    constraint foreign key (`locationID`) references `locations`(`id`)
 ) ENGINE=InnoDB;
