@@ -3,7 +3,7 @@
 /**
  * this class contains some useful utility functions
  */
-include_once dir(__FILE__) . '/../configs/configs.php';
+include_once dirname(__FILE__) . '/../configs/configs.php';
 
 class Utils {
 
@@ -13,16 +13,16 @@ class Utils {
      */
     public static function PDOConnect($db = null, $host = null, $user = null, $pass = null) {
         if ($db === null) {
-            $db = DATABASE;
+            $db = DBNAME;
         }
         if ($host === null) {
-            $host = HOST;
+            $host = DBHOST;
         }
         if ($user === null) {
-            $user = USER;
+            $user = DBUSER;
         }
         if ($pass === null) {
-            $pass = PASSWORD;
+            $pass = DBPASS;
         }
         try {
             $connString = 'mysql:host=' . $host . ';dbname=' . $db;
@@ -91,12 +91,15 @@ class Utils {
      * data SET TO true FOR INSERT & UPDATE STATEMENTS
      * @return formatResponse ARRAY
      */
-    public static function executePreparedStatement($SQL, $params, $fetchMode = PDO::FETCH_ASSOC, $dbConn = null, $noFetch = false, $getLastInsert = false) {
+    public static function executePreparedStatement($SQL, $params, $fetchMode = null, $dbConn = null, $noFetch = false, $getLastInsert = false) {
         if ($dbConn == null) {
             $dbConn = self::PDOConnect();
         }
         if ($dbConn == null) {
             return Utils::formatResponse(null, SC_GENERIC_FAILURE_CODE, 4, 'THERE WAS AN ERROR CONNECTING TO THE DATABASE');
+        }
+        if($fetchMode == null){
+            $fetchMode = PDO::FETCH_ASSOC;
         }
         try {
 
@@ -282,7 +285,7 @@ class Utils {
     public static function log($logLevel, $logString = null, $fileName = null, $function = null, $lineNo = null) {
         $SYSTEM_LOG_LEVEL = SYSTEM_LOG_LEVEL;
 
-        $logDirectory = LOG_PATH;
+        $logDirectory = LOG_DIRECTORY;
         $file = $logDirectory . "DEBUG.log";
         $date = date("Y-m-d H:i:s");
         $logType = null;
