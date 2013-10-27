@@ -22,7 +22,7 @@ define('FATAL', 'FATAL');
 define('SYSTEM_LOG_LEVEL', 10);
 
 //pipe separated list of email recipients
-define('EMAIL_RECIPIENTS', 'fred@example.com');
+define('EMAIL_RECIPIENTS', 'fred@example.com|muya@example.com');
 
 //email configs
 define('MAILER_USERNAME', 'some_cool_gmail_handle@gmail.com'); //Email username--to log in when sending emails
