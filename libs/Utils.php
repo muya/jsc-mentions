@@ -98,7 +98,7 @@ class Utils {
         if ($dbConn == null) {
             return Utils::formatResponse(null, SC_GENERIC_FAILURE_CODE, 4, 'THERE WAS AN ERROR CONNECTING TO THE DATABASE');
         }
-        if($fetchMode == null){
+        if ($fetchMode == null) {
             $fetchMode = PDO::FETCH_ASSOC;
         }
         try {
@@ -331,6 +331,70 @@ class Utils {
             } else {
                 trigger_error("flog Cannot log '$logString' to file '$file' ", E_USER_WARNING);
             }
+        }
+    }
+
+    /**
+     * function to write data to file
+     * @param string $JSONData the data to be written to the file
+     * @param string $date the date to be appended to the file name
+     */
+    public static function writeToFile($JSONData, $filename) {
+        if ($fo = fopen($filename, 'ab')) {
+            fwrite($fo, "$JSONData");
+            fclose($fo);
+            Utils::log('INFO', 'successfully written JSON data to file: ' . $filename, __CLASS__, __FUNCTION__, __LINE__);
+            return true;
+        } else {
+            Utils::log('ERROR', 'unable to write JSON data to file', __CLASS__, __FUNCTION__, __LINE__);
+            return false;
+        }
+    }
+
+    /**
+     * Function to handle the sending out of the messages
+     * @param type $subject
+     * @param type $recipientEmail
+     * @param type $recipientName
+     * @param type $message
+     * @param type $flogTitle
+     * @return boolean 
+     */
+    public static function sendMessage($subject, $recipientEmail, $recipientName, $message, $attachment = null) {
+        //Use phpmailer extension to send the email
+        $mail = new JPhpMailer;
+        $mail->IsSMTP();
+        $mail->SMTPSecure = EMAIL_SMTPSecure; // secure transfer enabled required for gmail
+        $mail->Host = EMAIL_HOST;
+        $mail->Port = EMAIL_PORT;
+        $mail->SMTPAuth = true;
+        $mail->Username = MAILER_USERNAME;
+        $mail->Password = MAILER_PASS;
+        $setFromEmail = MAILER_EMAIL;
+        $setFromName = EMAIL_FROM_NAME;
+        $mail->SetFrom($setFromEmail, $setFromName);
+        $mail->Subject = EMAIL_FROM_NAME . ' - ' . $subject;
+        $mail->AltBody = 'Please use an HTML compatible view to see this message';
+        $mail->MsgHTML($message);
+        $mail->AddAddress($recipientEmail, $recipientName); //To...where the email will be sent
+        //add the attachments
+        if (!is_null($attachment) && is_array($attachment)) {
+            foreach ($attachment as $a) {
+                $mail->AddAttachment($a['attachment'], $a['filename'], 'base64', 'text/json');
+            }
+        }
+
+        $subject = EMAIL_FROM_NAME . ' - ' . $subject;
+        //send the mail
+        if (!$mail->Send()) {
+            $error = 'Mail error: ' . $mail->ErrorInfo;
+            Utils::log(ERROR, 'an error occurred while sending email to '
+                    . $recipientEmail . ' : ' . $error, __CLASS__, __FUNCTION__, __LINE__);
+            return false;
+        } else {
+            Utils::log(INFO, 'successfully sent email to '
+                    . $recipientEmail, __CLASS__, __FUNCTION__, __LINE__);
+            return true;
         }
     }
 

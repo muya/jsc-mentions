@@ -20,3 +20,16 @@ define('EXCEPTION', 'EXCEPTION');
 define('UNDEFINED', 'UNDEFINED');
 define('FATAL', 'FATAL');
 define('SYSTEM_LOG_LEVEL', 10);
+
+//pipe separated list of email recipients
+define('EMAIL_RECIPIENTS', 'fred@example.com');
+
+//email configs
+define('MAILER_USERNAME', 'some_cool_gmail_handle@gmail.com'); //Email username--to log in when sending emails
+define('MAILER_PASS', 'AV3ryH@rdPAS5w0rd'); //Email password used to send emails
+define('MAILER_EMAIL', 'some_cool_gmail_handle@gmail.com'); //email --to send emails
+
+define('EMAIL_HOST', 'smtp.gmail.com');
+define('EMAIL_PORT', 465);
+define('EMAIL_SMTPSecure', 'ssl');
+define('EMAIL_FROM_NAME', 'Report Generator');
