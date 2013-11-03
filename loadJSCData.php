@@ -36,9 +36,13 @@ if ($fetchMentionsPerPlatformResponse['STAT_TYPE'] != SC_GENERIC_SUCCESS_CODE) {
 $mentionsPerLocation = $fetchMentionsPerLocationResponse['DATA'];
 $mentionsPerPlatform = $fetchMentionsPerPlatformResponse['DATA'];
 
+Utils::log(INFO, 'mentions per location data: '.json_encode($mentionsPerLocation));
+Utils::log(INFO, '==============================================================');
+Utils::log(INFO, 'mentions per platform data: '.json_encode($mentionsPerPlatform));
+
 //convert data to JSON and write to file
-$platformDataFileName = LOG_DIRECTORY . 'jsc_mentions_per_platform_'.Utils::now('Ymd').'.json';
-$locationDataFileName = LOG_DIRECTORY . 'jsc_mentions_per_location_'.Utils::now('Ymd').'.json';
+$platformDataFileName = LOG_DIRECTORY . 'jsc_mentions_per_platform_'.Utils::now('YmdHis').'.json';
+$locationDataFileName = LOG_DIRECTORY . 'jsc_mentions_per_location_'.Utils::now('YmdHis').'.json';
 
 Utils::writeToFile(json_encode($mentionsPerLocation), $locationDataFileName);
 Utils::writeToFile(json_encode($mentionsPerPlatform), $platformDataFileName);
